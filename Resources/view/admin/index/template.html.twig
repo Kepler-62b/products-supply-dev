@@ -1,0 +1,36 @@
+{% trans_default_domain('orders-order.admin') %}
+
+{% extends Template('/admin/base.html.twig') %}
+
+ {% block title %}{{ 'page.index'|trans }}{% endblock %}
+
+{# {% block stylesheets %} #}
+{#     <link href="/assets/plugins/draggable/draggable.min.css" rel="stylesheet" type="text/css"> #}
+{#     <link href="/assets/plugins/nice-select2/nice-select2.min.css" rel="stylesheet" type="text/css"> #}
+{#     <link href="/assets//plugins/datepicker/datepicker.min.css" rel="stylesheet"> #}
+{#     <link href="/assets/css/print.min.css" rel="stylesheet"> #}
+{# {% endblock %} #}
+
+
+{% block content %}
+
+    {{ include(_self|replace({ "template.html.twig": baks_settings.device~"/content.html.twig" })) }}
+
+{% endblock %}
+
+{% block javascript %}
+
+{#<script nonce='{{ csp_nonce() }}' async data-src="/assets/plugins/draggable/draggable.bundle.min.js?v={{ version }}" class="lazy"></script>#}
+{#<script nonce='{{ csp_nonce() }}' async data-src="/assets/plugins/nice-select2/nice-select2.min.js?v={{ version }}" class="lazy"></script>#}
+{#<script nonce='{{ csp_nonce() }}' async data-src="/assets/orders-order/order_draggable.min.js?v={{ version }}" class='lazy'></script>#}
+{#<script nonce='{{ csp_nonce() }}' async data-src='/assets/plugins/datepicker/datepicker.js?v={{ version }}' class='lazy'></script>#}
+
+{#  Сокеты  #}
+
+{#<script nonce="{{ csp_nonce() }}">#}
+{#    window.centrifugo_dsn = "{{ centrifugo_dsn }}";#}
+{#    window.centrifugo_token = "{{ token }}";#}
+{#</script>#}
+
+{% endblock %}
+

@@ -1,0 +1,68 @@
+{% trans_default_domain 'status.product.supply' %}
+
+<div class="d-flex justify-content-between gap-2 cards-box p-2 ">
+
+    {#    {% set status_array = status|filter(v => v.getValue != 'canceled' and v.getValue != 'decommission') %} #}
+    {% set width_col = (1100 / (status|length))|round %}
+
+    {% for stats in status %}
+
+        {% set color = stats.color() %}
+        {% set counter = query[stats.getValue]|length %}
+
+        <div class="w-100 d-flex flex-column gap-2" style="min-width: {{ width_col }}px;">
+
+            <div class="d-flex flex-column gap-2 draggable-zone h-100 justify-content-start min-vh-100"
+                 style="overflow-y: visible;"
+                 data-status="{{ stats.getValue }}"
+                 data-level="{{ stats.getValue == 'new' or
+                 stats.getValue == 'delivery'  or
+                 stats.getValue == 'extradition'  or
+                 stats.getValue == 'completed'
+                 ? 'restricted' }}">
+
+                {% set href = null %}
+
+                {% if stats.getValue == 'package' and (is_granted('ROLE_PRODUCT_STOCK_PACKAGE') or is_granted('ROLE_ADMIN')) %}
+                    {% set href = 'products-stocks:admin.package.index' %}
+                {% elseif stats.getValue == 'extradition' and (is_granted('ROLE_PRODUCT_STOCK_PICKUP') or is_granted('ROLE_ADMIN')) %}
+                    {% set href = 'products-stocks:admin.pickup.index' %}
+                {% endif %}
+
+                {% if href %}
+                    <a href="{{ path(href) }}" class="w-100 badge p-2 sticky-top z-index-5"
+                       style="top: 5rem; background-color: {{ color }};">
+                        {{ stats.getValue|trans }}
+                    </a>
+                {% else %}
+
+                    <div class="w-100 badge p-2 sticky-top z-index-5"
+                         style="top: 5rem; background-color: {{ color }};">
+                        {{ stats.getValue|trans }}
+                    </div>
+
+                {% endif %}
+
+                <div class="text-center"><small>
+                        {# @TODO  #}
+                        {{ counter }} {{ 'num_of_product_supply'|trans({'count': counter}, 'status.messages') }}</small>
+                </div>
+
+                {# КАРТОЧКИ ЗАКАЗА #}
+                {# @var supply \BaksDev\Products\Supply\Repository\AllProductSupply\AllProductSupplyResult #}
+
+                {% for supply in query[stats.getValue] %}
+
+                    {{ include(_self|replace({ "columns.html.twig": "supply.html.twig" })) }}
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+
+    {% endfor %}
+
+</div>
